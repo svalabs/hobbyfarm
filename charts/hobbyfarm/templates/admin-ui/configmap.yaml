@@ -14,3 +14,7 @@ data:
         },
         "logo": {{ $.Values.admin.config.logo | quote }}
     }
+
+  {{- if $.Values.admin.custom }}
+  custom.css: {{ $.Values.admin.custom | quote }}
+  {{- end }}

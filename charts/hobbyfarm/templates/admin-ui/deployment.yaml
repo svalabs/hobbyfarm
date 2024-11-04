@@ -39,6 +39,11 @@ spec:
               mountPath: /usr/share/nginx/html/assets/default/rancher-labs-stacked-color.svg
               subPath: rancher-labs-stacked-color.svg
             {{- end }}
+            {{- if $.Values.admin.custom }}
+            - name: config
+              mountPath: /usr/share/nginx/html/custom.css
+              subPath: custom.css
+            {{- end }}
       volumes:
         {{- if or $.Values.admin.configMapName }}
         - name: config

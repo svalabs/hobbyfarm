@@ -11,6 +11,10 @@ admin:  # defaults for admin service
       logo: /assets/default/rancher-labs-stacked-color.svg
       background: assets/default/vault.jpg
     logo: /assets/default/logo.svg
+  # custom: |
+    # .custom-css {
+      # /* Some custom css */
+    # }
 
 ui:  # defaults for UI service
   image: hobbyfarm/ui:v3.2.5
