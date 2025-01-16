@@ -147,6 +147,14 @@ spec:
               name: environment-service
               port: 
                 number: {{ $.Values.environment.apiPort }}
+        # cost-service
+        - pathType: Prefix
+          path: "/a/cost"
+          backend:
+            service:
+              name: cost-service
+              port: 
+                number: {{ $.Values.cost.apiPort }}
         # course-service
         - pathType: Prefix
           path: "/a/course"

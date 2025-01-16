@@ -1,0 +1,12 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cost-config
+data:
+  config.json: |
+    {{- if $.Values.cost.trackableResources }}
+    {{ toJson $.Values.cost.trackableResources | indent 4 }}
+    {{- else }}
+    []
+    {{- end }}
