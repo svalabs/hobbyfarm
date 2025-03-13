@@ -90,6 +90,12 @@ progress:
   logLevel: "0"
   apiPort: 80
   serviceAccountName: "hobbyfarm-progress"
+quiz:
+  image: hobbyfarm/quiz-service:master
+  replicas: 1
+  logLevel: "0"
+  apiPort: 80
+  serviceAccountName: "hobbyfarm-quiz"
 rbac:
   image: hobbyfarm/rbac-service:v3.2.5
   replicas: 1

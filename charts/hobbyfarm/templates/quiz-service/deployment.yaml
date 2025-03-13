@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: quiz-service
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: {{ $.Values.quiz.replicas }}
+  selector:
+    matchLabels:
+      component: quiz-service
+  template:
+    metadata:
+      labels:
+        component: quiz-service
+      annotations:
+        checksum/secret: {{ include (print $.Template.BasePath "/tls-certificates/grpc-secret.yaml") . | sha256sum }}
+    spec:
+      serviceAccountName: {{ .Values.quiz.serviceAccountName }}
+      containers:
+        - name: quiz-service
+          image: {{ $.Values.quiz.image }}
+          command: ["app"]
+          args:
+          - "-v=9"
+          - "-logtostderr"
+          - --enableReflection={{ .Values.general.enableReflection }}
+          env:
+            - name: LOG_LEVEL
+              value: {{ $.Values.quiz.logLevel | quote }}
+            - name: HF_NAMESPACE
+              value: {{ .Release.Namespace | quote }}
+            - name: PORT
+              value: {{ .Values.quiz.apiPort | quote }}
+            - name: GRPC_PORT
+              value: "8080"
+            - name: STATEFULSET_NAME
+              value: "quiz-service"
+            - name: CONTROLLER_THREAD_COUNT
+              value: {{ .Values.quiz.controllerWorkerThreadCount | quote }}
+          ports:
+          - containerPort: {{ .Values.quiz.apiPort }}
+          - containerPort: 8080
+          volumeMounts:
+          - name: quiz-secret
+            mountPath: "/etc/ssl/certs/ca.crt"
+            subPath: ca.crt
+            readOnly: true
+          - name: quiz-secret
+            mountPath: "/etc/ssl/certs/tls.key"
+            subPath: tls.key
+            readOnly: true
+          - name: quiz-secret
+            mountPath: "/etc/ssl/certs/tls.crt"
+            subPath: tls.crt
+            readOnly: true
+          - name: webhook-secret
+            mountPath: "/webhook-secret/ca.crt"
+            subPath: ca.crt
+            readOnly: true
+      volumes:
+      - name: quiz-secret
+        secret:
+          secretName: hobbyfarm-grpc-secret
+          optional: false
+      - name: webhook-secret
+        secret:
+          secretName: hobbyfarm-webhook-secret
+          optional: false
