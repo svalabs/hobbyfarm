@@ -63,7 +63,7 @@ cost:
   logLevel: "0"
   apiPort: 80
   serviceAccountName: "hobbyfarm-cost"
-  trackableResources: # add all non default kubernetes resources for cost tracking
+  trackableResources:  # add all non default kubernetes resources for cost tracking
     - group: "hobbyfarm.io"
       version: "v1"
       resource: "virtualmachines"
